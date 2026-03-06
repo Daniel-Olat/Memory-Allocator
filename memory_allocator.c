@@ -27,11 +27,14 @@ block_t *request_space(block_t *last , size_t size){
 };
 
 //Memory block reusage
-block_t find_free_block( block_t **last , size_t size){
+block_t *find_free_block(block_t **last, size_t size) {
+
     block_t *current = head;
-    while(current && !(current->free && current->size >= size)){
+
+    while (current && !(current->free && current->size >= size)) {
         *last = current;
         current = current->next;
     }
+
     return current;
-};
+}
