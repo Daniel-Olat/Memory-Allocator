@@ -38,3 +38,35 @@ block_t *find_free_block(block_t **last, size_t size) {
 
     return current;
 }
+
+//Implementing malloc
+void *malloc(size_t size){
+    block_t *block;
+    if (size <=0)
+        return NULL;
+    if (!head){
+        block  = request_space(NULL , size);
+        if (!block)
+            return NULL;
+        head = block;
+    } else{
+        block_t *last =  head;
+        block = find_free_block(&last , size);
+        if(!block){
+            block = request_space(last , size);
+            if (!block)
+                return NULL;
+        } else{
+            block->free = 0;
+        }
+    }
+    return(block + 1);
+}
+
+//Implementing free
+void free(void *ptr){
+    if (!ptr)
+        return;
+    block_t *block  = (block_t*)ptr - 1;
+    block->free = 1;
+}
